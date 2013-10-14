@@ -6,17 +6,17 @@ package org.lds.example;
 
 import java.util.logging.Logger;
 
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.Role;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.context.support.ResourceBundleMessageSource;
 
 import static org.lds.stack.logging.LogUtils.*;
+import static org.springframework.beans.factory.config.BeanDefinition.*;
 
 /**
  * Main application configuration. Enables component scanning and provides
@@ -26,6 +26,7 @@ import static org.lds.stack.logging.LogUtils.*;
  */
 @Configuration
 @ComponentScan(basePackageClasses = Main.class)
+@PropertySource({"META-INF/spring/default.properties"})
 public class MainConfiguration {
 
 	/**
@@ -34,66 +35,34 @@ public class MainConfiguration {
 	private static final Logger LOG = getLogger();
 
 	static {
-		info(LOG, "Obtained logger: {0}", LOG.getName());
 		info(LOG, "Main configuration loading...");
 	}
 
 	/**
 	 * Provides support for property placeholder expressions in the form ${...}.
+	 * <p/>
+	 * <i>This Made static because it is an instance of
+	 * {@link org.springframework.beans.factory.config.BeanFactoryPostProcessor},
+	 * meaning it has to be available before beans with property placeholders
+	 * get instantiated so it can modify their bean definitions.</i>
 	 *
 	 * @return A bean for configuring support for property placeholders
 	 */
-	@Bean
+	@Bean @Role(ROLE_INFRASTRUCTURE)
 	static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
 		info(LOG, "Enabling support for property placeholders.");
 		return new PropertySourcesPlaceholderConfigurer();
 	}
 
-	MainConfiguration() {}
-
-	/**
-	 * Default profile configuration
-	 */
-	@Configuration
-	@Profile("!local")
-	@PropertySource({"META-INF/spring/default.properties"})
-	static class DefaultConfiguration extends BaseProfileConfiguration {
-		static { info(LOG, "Loading \"default\" profile..."); }
+	@Bean
+	//@Role(ROLE_APPLICATION) // ROLE_APPLICATION is the default
+	MessageSource messageSource() {
+		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+		messageSource.setBasename("messages");
+		return messageSource;
 	}
 
-	/**
-	 * Local profile configuration. Loads "default" profile properties first,
-	 * then "local" profile properties.
-	 */
-	@Configuration
-	@Profile("local")
-	@PropertySource({
-		"META-INF/spring/default.properties",
-		"META-INF/spring/local.properties"})
-	static class LocalConfiguration extends BaseProfileConfiguration {
-		static { info(LOG, "Loading \"local\" profile..."); }
-	}
-
-	/**
-	 * Base profile configuration class. Inject the name of the profile and
-	 * prints a message to the log upon initialization to identify the active
-	 * profile name.
-	 */
-	static abstract class BaseProfileConfiguration {
-
-		/**
-		 * Injects the active "profile.name" property from the loaded property
-		 * resources.
-		 */
-		@Value("${profile.name}")
-		private String profileName;
-
-		/**
-		 * Prints a message to the log that identifies the active profile name.
-		 */
-		@PostConstruct
-		void init() {
-			info(LOG, "The \"{0}\" profile is now active.", profileName);
-		}
+	MainConfiguration() {
+		info(LOG, "Main configuration initialized.");
 	}
 }

@@ -4,13 +4,17 @@
  */
 package org.lds.example;
 
+import java.util.Locale;
 import java.util.logging.Logger;
 
-import javax.annotation.PostConstruct;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.Lifecycle;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
+import static org.lds.example.Main.LINE;
 import static org.lds.stack.logging.LogUtils.*;
 
 /**
@@ -19,19 +23,40 @@ import static org.lds.stack.logging.LogUtils.*;
  */
 @Controller
 @Lazy(false)
-public class Application {
+public class Application implements Lifecycle {
 
 	private static final Logger LOG = getLogger();
 
-	@PostConstruct
-	public void startup() {
-		info(LOG, "Starting up...");
+	private boolean running;
 
-		// TODO write your application
-		info(LOG, "\n------------------------------------------------------------------------" +
-				  "\n Welcome to Core Spring Framework Training" +
-				  "\n------------------------------------------------------------------------");
+	@Autowired
+	private MessageSource messages;
 
-		info(LOG, "Shutting down...");
+	@Value("${application.id}")
+	private String applicationId;
+
+	@Override
+	public void start() {
+		info(LOG, "Starting up application controller...");
+
+		// TODO code your application logic
+		info(LOG, LINE + "\n " + message("application.title", applicationId) + LINE);
+
+		running = true;
+	}
+
+	@Override
+	public void stop() {
+		info(LOG, "Shutting down application controller...");
+		running = false;
+	}
+
+	@Override
+	public boolean isRunning() {
+		return running;
+	}
+
+	private String message(String code, String... args) {
+		return messages.getMessage(code, args, Locale.getDefault());
 	}
 }

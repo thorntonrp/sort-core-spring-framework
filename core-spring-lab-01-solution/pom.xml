@@ -23,6 +23,7 @@
 		<projectName>${project.artifactId}</projectName>
 		<jdkVersion>1.7</jdkVersion>
 		<mainClass>org.lds.example.Main</mainClass>
+		<mavenCompilerPluginVersion>2.5.1</mavenCompilerPluginVersion>
 	</properties>
 
 	<dependencies>
