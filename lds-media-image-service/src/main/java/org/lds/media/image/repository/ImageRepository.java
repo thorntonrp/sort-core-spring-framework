@@ -60,6 +60,7 @@ public class ImageRepository {
 	}
 
 	//-- Public API ----------------------------------------------------------//
+
 	public String getId() {
 		return "lds-media-library-image-gallery";
 	}
