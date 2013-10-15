@@ -12,7 +12,7 @@
 	</parent>
 
 	<groupId>org.lds.stack.training</groupId>
-	<artifactId>core-spring-lab-02-solution</artifactId>
+	<artifactId>core-spring-lab-01</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>
 
@@ -23,6 +23,7 @@
 		<projectName>${project.artifactId}</projectName>
 		<jdkVersion>1.7</jdkVersion>
 		<mainClass>org.lds.example.Main</mainClass>
+		<mavenCompilerPluginVersion>2.5.1</mavenCompilerPluginVersion>
 	</properties>
 
 	<dependencies>
@@ -39,12 +40,16 @@
 			<artifactId>slf4j-jdk14</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.lds.stack.maven</groupId>
-			<artifactId>stack-maven-input-api</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.lds.stack</groupId>
 			<artifactId>stack-utils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
 		</dependency>
 	</dependencies>
 

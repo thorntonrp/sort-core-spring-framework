@@ -4,13 +4,8 @@
  */
 package org.lds.example;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.util.logging.Logger;
 
-import org.lds.media.image.repository.ImageRepository;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -50,9 +45,6 @@ public class MainConfiguration {
 	 * {@link org.springframework.beans.factory.config.BeanFactoryPostProcessor},
 	 * meaning it has to be available before beans with property placeholders
 	 * get instantiated so it can modify their bean definitions.</i>
-	 * <p/>
-	 * Role is "infrastructure" because it performs a background role in the
-	 * application. Application code will not interact with it directly.
 	 *
 	 * @return A bean for configuring support for property placeholders
 	 */
@@ -62,40 +54,12 @@ public class MainConfiguration {
 		return new PropertySourcesPlaceholderConfigurer();
 	}
 
-	/**
-	 * For message strings.
-	 * <p/>
-	 * Role is "application" by default, meaning this is a user defined bean
-	 * that forms a major part of the application.
-	 */
 	@Bean
+	//@Role(ROLE_APPLICATION) // ROLE_APPLICATION is the default
 	MessageSource messageSource() {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 		messageSource.setBasename("messages");
 		return messageSource;
-	}
-
-	@Bean
-	ImageRepository imageRepository() {
-		return new ImageRepository();
-	}
-
-	/**
-	 * For console output. Return value is {@link AutoCloseable}, so Spring
-	 * will handle cleanup.
-	 */
-	@Bean
-	PrintWriter output() {
-		return new PrintWriter(new OutputStreamWriter(System.out));
-	}
-
-	/**
-	 * For console input. Return value is {@link AutoCloseable}, so Spring
-	 * will handle cleanup.
-	 */
-	@Bean
-	BufferedReader input() {
-		return new BufferedReader(new InputStreamReader(System.in));
 	}
 
 	MainConfiguration() {

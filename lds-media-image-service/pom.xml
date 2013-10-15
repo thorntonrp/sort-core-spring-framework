@@ -12,56 +12,41 @@
 	</parent>
 
 	<groupId>org.lds.stack.training</groupId>
-	<artifactId>core-spring-lab-02-solution</artifactId>
+	<artifactId>lds-media-image-service</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>
 
 	<name>${project.artifactId}</name>
-	<description></description>
+	<description>
+		An example library for scanning, loading, and browsing images.
+	</description>
 
 	<properties>
 		<projectName>${project.artifactId}</projectName>
 		<jdkVersion>1.7</jdkVersion>
-		<mainClass>org.lds.example.Main</mainClass>
+		<mavenCompilerPluginVersion>2.5.1</mavenCompilerPluginVersion>
 	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-jdk14</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.lds.stack.maven</groupId>
-			<artifactId>stack-maven-input-api</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.lds.stack</groupId>
 			<artifactId>stack-utils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.lds.stack.maven</groupId>
-				<artifactId>stack-bundle-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>bundle</id>
-						<phase>package</phase>
-						<goals>
-							<goal>package-bundle</goal>
-						</goals>
-					</execution>
-				</executions>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>

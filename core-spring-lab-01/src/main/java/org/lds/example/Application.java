@@ -7,7 +7,6 @@ package org.lds.example;
 import java.util.Locale;
 import java.util.logging.Logger;
 
-import org.lds.example.console.SimpleConsole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.Lifecycle;
@@ -15,8 +14,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
+import static org.lds.example.Main.LINE;
 import static org.lds.stack.logging.LogUtils.*;
-import static org.lds.stack.utils.StringUtils.padRight;
 
 /**
  *
@@ -28,43 +27,27 @@ public class Application implements Lifecycle {
 
 	private static final Logger LOG = getLogger();
 
-	public static final String LINE = padRight("\n", '-', 73);
-
 	private boolean running;
-
-	//-- Injected Dependencies -----------------------------------------------//
 
 	@Autowired
 	private MessageSource messages;
 
-	@Autowired
-	private SimpleConsole console;
-
 	@Value("${application.id}")
 	private String applicationId;
 
-	@Value("${build.date}")
-	private String buildDate;
-
-	//-- Lifecycle Implementation --------------------------------------------//
-
 	@Override
 	public void start() {
-		info(LOG, "Starting up the application controller...");
-		info(LOG,
-				LINE +
-				"\n " + message("application.title", applicationId) +
-				"\n " + message("build.date", buildDate) +
-				LINE);
+		info(LOG, "Starting up application controller...");
 
-		console.run();
+		// TODO code your application logic
+		info(LOG, LINE + "\n " + message("application.title", applicationId) + LINE);
 
 		running = true;
 	}
 
 	@Override
 	public void stop() {
-		info(LOG, "Shutting down the application controller...");
+		info(LOG, "Shutting down application controller...");
 		running = false;
 	}
 
@@ -72,8 +55,6 @@ public class Application implements Lifecycle {
 	public boolean isRunning() {
 		return running;
 	}
-
-	//-- Private Implementation ----------------------------------------------//
 
 	private String message(String code, String... args) {
 		return messages.getMessage(code, args, Locale.getDefault());

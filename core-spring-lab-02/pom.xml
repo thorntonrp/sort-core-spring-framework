@@ -12,7 +12,7 @@
 	</parent>
 
 	<groupId>org.lds.stack.training</groupId>
-	<artifactId>core-spring-lab-02-solution</artifactId>
+	<artifactId>core-spring-lab-02</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>
 
