@@ -22,14 +22,15 @@ public class ChangeCollection extends Command {
 			out.println("Expected a collectionId or '..'");
 		}
 		String collectionId = args[1];
-		ImageCollection collection = imageRepository.getImageCollection(collectionId);
-		if (collection == null) {
-			out.println("Invalid collectionId");
-		}
 		if ("..".equals(collectionId)) {
 			context.remove("collectionId");
+		} else {
+			ImageCollection collection = imageRepository.getImageCollection(collectionId);
+			if (collection == null) {
+				out.println("Invalid collectionId");
+			}
+			context.set("collectionId", args[1]);
 		}
-		context.set("collectionId", args[1]);
 	}
 
 	@Override

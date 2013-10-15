@@ -84,7 +84,7 @@ public class SimpleConsole {
 
 	private void printHelp() {
 		for (Map.Entry<String, Command> entry : commands.entrySet()) {
-			out.printf("%1$16s %2$s", entry.getKey(), entry.getValue().getDescription());
+			out.printf("%1$-16s %2$s%n", entry.getKey(), entry.getValue().getDescription());
 		}
 	}
 }

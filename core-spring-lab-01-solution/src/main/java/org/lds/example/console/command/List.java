@@ -10,6 +10,8 @@ import org.lds.media.image.model.Image;
 import org.lds.media.image.model.ImageCollection;
 import org.springframework.stereotype.Component;
 
+import static java.util.Collections.sort;
+
 /**
  *
  * @author Robert Thornton <robert.p.thornton@gmail.com>
@@ -41,6 +43,7 @@ public class List extends Command {
 
 	private void listImages(String collectionId) throws IOException {
 		java.util.List<Image> images = imageRepository.getImagesByCollection(collectionId);
+		sort(images);
 		out.println(
 				"----------------------------------------------------------\n" +
 				" Available Images\n" +
@@ -53,6 +56,7 @@ public class List extends Command {
 
 	private void listCollections() throws IOException {
 		java.util.List<ImageCollection> collections = imageRepository.getImageCollections();
+		sort(collections);
 		out.println(
 				"----------------------------------------------------------\n" +
 				" Available Collections\n" +

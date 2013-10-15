@@ -6,12 +6,14 @@ package org.lds.example.console.command;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.lds.media.image.model.Image;
 import org.lds.media.image.model.ImageType;
 import org.springframework.stereotype.Component;
 
+import static java.util.Collections.sort;
 import static org.lds.stack.logging.LogUtils.*;
 
 /**
@@ -51,7 +53,9 @@ public class Download extends Command {
 	}
 
 	private void downloadAll(String collectionId) throws IOException {
-		for (Image image : imageRepository.getImagesByCollection(collectionId)) {
+		List<Image> images = imageRepository.getImagesByCollection(collectionId);
+		sort(images);
+		for (Image image : images) {
 			download(collectionId, image.getId());
 		}
 	}
