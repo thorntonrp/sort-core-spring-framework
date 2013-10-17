@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 
 import org.lds.example.console.command.Command;
 import org.lds.example.console.command.CommandContext;
+import org.lds.media.image.repository.OfflineRepositoryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -36,6 +37,9 @@ public class SimpleConsole {
 
 	@Autowired
 	private Map<String, Command> commands;
+
+	@Autowired
+	private Command list;
 
 	@Autowired
 	private CommandContext context;
@@ -67,7 +71,10 @@ public class SimpleConsole {
 						command.execute(args);
 					}
 				}
-			} catch (IllegalArgumentException | IOException ex) {
+			} catch (IllegalArgumentException | OfflineRepositoryException ex) {
+				out.println(ex.getMessage());
+				out.flush();
+			} catch (IOException ex) {
 				warning(LOG, ex.toString(), ex);
 				out.println(ex.getMessage());
 				out.flush();

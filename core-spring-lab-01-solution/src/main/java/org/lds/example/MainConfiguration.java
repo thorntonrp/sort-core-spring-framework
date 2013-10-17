@@ -10,11 +10,16 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.logging.Logger;
 
+import javax.annotation.PostConstruct;
+
 import org.lds.media.image.repository.ImageRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Role;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -31,7 +36,6 @@ import static org.springframework.beans.factory.config.BeanDefinition.*;
  */
 @Configuration
 @ComponentScan(basePackageClasses = Main.class)
-@PropertySource({"META-INF/spring/default.properties"})
 public class MainConfiguration {
 
 	/**
@@ -56,7 +60,7 @@ public class MainConfiguration {
 	 *
 	 * @return A bean for configuring support for property placeholders
 	 */
-	@Bean @Role(ROLE_INFRASTRUCTURE)
+	@Bean() @Role(ROLE_INFRASTRUCTURE) @DependsOn(value = "envConfig")
 	static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
 		info(LOG, "Enabling support for property placeholders.");
 		return new PropertySourcesPlaceholderConfigurer();
@@ -76,8 +80,10 @@ public class MainConfiguration {
 	}
 
 	@Bean
-	ImageRepository imageRepository() {
-		return new ImageRepository();
+	ImageRepository imageRepository(@Value("${repository.offline}") boolean offline) {
+		ImageRepository repository = new ImageRepository();
+		repository.setOffline(offline);
+		return repository;
 	}
 
 	/**
@@ -100,5 +106,51 @@ public class MainConfiguration {
 
 	MainConfiguration() {
 		info(LOG, "Main configuration initialized.");
+	}
+
+	/**
+	 * Default profile configuration
+	 */
+	@Configuration("envConfig")
+	@Profile("!offline")
+	@PropertySource({"META-INF/spring/default.properties"})
+	static class DefaultConfiguration extends BaseProfileConfiguration {
+		static { info(LOG, "Loading \"default\" profile..."); }
+	}
+
+	/**
+	 * Offline profile configuration. Loads "default" profile properties first,
+	 * then "offline" profile properties.
+	 */
+	@Configuration("envConfig")
+	@Profile("offline")
+	@PropertySource({
+		"META-INF/spring/default.properties",
+		"META-INF/spring/offline.properties"})
+	static class OfflineConfiguration extends BaseProfileConfiguration {
+		static { info(LOG, "Loading \"offline\" profile..."); }
+	}
+
+	/**
+	 * Base profile configuration class. Inject the name of the profile and
+	 * prints a message to the log upon initialization to identify the active
+	 * profile name.
+	 */
+	static abstract class BaseProfileConfiguration {
+
+		/**
+		 * Injects the active "profile.name" property from the loaded property
+		 * resources.
+		 */
+		@Value("${profile.name}")
+		private String profileName;
+
+		/**
+		 * Prints a message to the log that identifies the active profile name.
+		 */
+		@PostConstruct
+		void init() {
+			info(LOG, "The \"{0}\" profile is now active.", profileName);
+		}
 	}
 }
