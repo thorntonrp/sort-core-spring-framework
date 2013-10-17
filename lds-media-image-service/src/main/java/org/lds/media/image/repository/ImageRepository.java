@@ -120,7 +120,7 @@ public class ImageRepository {
 		URL url = image.getUrl(imageType);
 		if (!localFile.exists()) {
 			if (offline) {
-				throw new IOException("Repository is offline");
+				throw new OfflineRepositoryException("Repository is offline");
 			} else {
 				localFile.getParentFile().mkdirs();
 				try (FileOutputStream out = new FileOutputStream(localFile);
