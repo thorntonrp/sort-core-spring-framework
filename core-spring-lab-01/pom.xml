@@ -44,12 +44,9 @@
 			<artifactId>stack-utils</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
+			<groupId>org.lds.stack.training</groupId>
+			<artifactId>lds-media-image-service</artifactId>
+			<version>1.0</version>
 		</dependency>
 	</dependencies>
 
