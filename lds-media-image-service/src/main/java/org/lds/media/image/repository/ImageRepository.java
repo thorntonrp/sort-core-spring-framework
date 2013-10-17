@@ -163,7 +163,7 @@ public class ImageRepository {
 		String source;
 		if (!cacheFile.exists()) {
 			if (offline) {
-				throw new IOException("Repository is offline");
+				throw new OfflineRepositoryException("Repository is offline");
 			} else {
 				cacheFile.getParentFile().mkdirs();
 				source = cleanHtml(read(url, UTF_8));
