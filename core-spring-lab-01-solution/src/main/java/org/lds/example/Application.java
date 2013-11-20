@@ -18,9 +18,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 
 import static java.util.Arrays.asList;
+import static org.lds.stack.logging.LogUtils.*;
 import static org.lds.stack.utils.CollectionUtils.isEmpty;
 import static org.lds.stack.utils.StringUtils.*;
-import static org.lds.stack.logging.LogUtils.*;
 
 /**
  *

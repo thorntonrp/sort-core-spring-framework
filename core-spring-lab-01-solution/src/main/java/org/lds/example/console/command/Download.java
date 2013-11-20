@@ -18,7 +18,7 @@ import static org.lds.stack.logging.LogUtils.*;
 
 /**
  *
- * @author Robert Thornton <robert.p.thornton@gmail.com>
+ * @author Robert Thornton <thorntonrp@ldschurch.org>
  */
 @Component
 public class Download extends Command {
@@ -41,7 +41,8 @@ public class Download extends Command {
 				downloadAll(collectionId);
 			} else {
 				for (int i = 1; i < args.length; i++) {
-					download(collectionId, args[i]);
+					Image image = imageRepository.getImage(collectionId, args[i]);
+					download(collectionId, image);
 				}
 			}
 		}
@@ -56,14 +57,18 @@ public class Download extends Command {
 		List<Image> images = imageRepository.getImagesByCollection(collectionId);
 		sort(images);
 		for (Image image : images) {
-			download(collectionId, image.getId());
+			download(collectionId, image);
 		}
 	}
 
-	private void download(String collectionId, String imageId) throws IOException {
+	private void download(String collectionId, Image image) throws IOException {
 		for (ImageType imageType : ImageType.values()) {
 			try {
-				imageRepository.downloadImage(collectionId, imageId, imageType);
+				out.printf("Downloading %s ... ", image.getUrl(imageType));
+				out.flush();
+				imageRepository.downloadImage(collectionId, image.getId(), imageType);
+				out.println("Done.");
+				out.flush();
 			} catch (FileNotFoundException ex) {
 				warning(LOG, ex.toString());
 			}

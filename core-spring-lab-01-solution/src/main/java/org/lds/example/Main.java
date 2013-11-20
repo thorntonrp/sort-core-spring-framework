@@ -21,6 +21,8 @@ public class Main {
 
 	private static final Logger LOG = getLogger();
 
+	private static GenericApplicationContext context;
+
 	/**
 	 * Application entry point. Starts up the Spring application context and
 	 * invokes the main controller.
@@ -28,8 +30,6 @@ public class Main {
 	 * @param args command-line arguments (ignored)
 	 */
 	public static void main(String[] args) {
-		GenericApplicationContext context;
-
 		// Initialize the application context from the annotatd configuration class
 		info(LOG, "Initializing Spring application context");
 		context = new AnnotationConfigApplicationContext(MainConfiguration.class);
